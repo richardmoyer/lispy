@@ -1,3 +1,4 @@
+/* test ssh */
 #include "mpc.h"
 
 #ifdef _WIN32
