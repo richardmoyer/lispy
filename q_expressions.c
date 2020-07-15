@@ -1,4 +1,3 @@
-/*comment*/
 #include "mpc.h"
 
 #ifdef _WIN32
@@ -169,7 +168,7 @@ lval* builtin_head(lval* a) {
   LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
     "Function 'head' passed incorrect type.");
   LASSERT(a, a->cell[0]->count != 0,
-    "Function 'head' passed {}.");
+    "Function 'head' passed {}!");
 
   lval* v = lval_take(a, 0);
   while (v->count > 1) { lval_del(lval_pop(v, 1)); }
@@ -182,7 +181,7 @@ lval* builtin_tail(lval* a) {
   LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
     "Function 'tail' passed incorrect type.");
   LASSERT(a, a->cell[0]->count != 0,
-    "Function 'tail' passed {}.");
+    "Function 'tail' passed {}!");
 
   lval* v = lval_take(a, 0);
   lval_del(lval_pop(v, 0));
