@@ -97,10 +97,9 @@ void lval_del(lval* v) {
 
   switch (v->type) {
     case LVAL_NUM: break;
+    case LVAL_FUM: break;
     case LVAL_ERR: free(v->err); break;
     case LVAL_SYM: free(v->sym); break;
-
-    /* If Qexpr or Sexpr then delete all elements inside */
     case LVAL_QEXPR:
     case LVAL_SEXPR:
       for (int i = 0; i < v->count; i++) {
@@ -112,6 +111,40 @@ void lval_del(lval* v) {
   }
 
   free(v);
+}
+
+lval* lval_copy(lval* v) {
+
+  lval* x = malloc(sizeof(lval));
+  x->type = v->type;
+
+  switch (v->type) {
+
+    /* Copy Functions and Numbers Directly */
+    case LVAL_FUN: x->fun = v->fun; break;
+    case LVAL_NUM: x->num = v->num; break;
+
+      /* Copy Strings using malloc and strcpy */
+    case LVAL_ERR:
+      x->err = malloc(strlen(v->err) + 1);
+      strcpy(x->err, v->err); break;
+
+    case LVAL_SYM:
+      x->sym = malloc(strlen(v->sym) + 1);
+      strcpy(x->sym, v->sym); break;
+
+      /* Copy lists by copying each sub-expression */
+    case LVAL_SEXPR:
+    case LVAL_QEXPR:
+      x->count = v->count;
+      x->cell = malloc(sizeof(lval*) * x->count);
+      for (int i = 0; i < x->count; i++) {
+        x->cell[i] = lval_copy(v->cell[i]);
+      }
+      break;
+  }
+
+  return x;
 }
 
 lval* lval_add(lval* v, lval* x) {
