@@ -50,3 +50,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+/.ccls-cache/@@home@richm@projects@lispy/
+/.ccls-cache/@home@richm@projects@lispy/
