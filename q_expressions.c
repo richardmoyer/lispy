@@ -219,6 +219,38 @@ char* ltype_name(int t) {
 }
 
 /* Lisp Environment */
+struct lenv {
+  int count;
+  char** syms;
+  lval** vals;
+};
+
+lenv* lenv_new(void) {
+
+  /* Initialize struct */
+  lenv* e = malloc(sizeof(lenv));
+  e->count = 0;
+  e->syms = NULL;
+  e->vals = NULL;
+  return e;
+  
+  
+}
+
+void lenv_del(lenv* e) {
+  /* Iterate over all items in environment deleting them */
+  for (int i = 0; i < e->count; i++) {
+    free(e->syms[i]);
+    lval_del(e->vals[i]);
+  }
+
+  /*Free allocated memory for lists*/
+  free(e->syms);
+  free(e->vals);
+  free(e);
+}
+
+/* line 263 */
 
 #define LASSERT(args, cond, err) \
   if (!(cond)) { lval_del(args); return lval_err(err); }
