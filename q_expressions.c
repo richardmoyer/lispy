@@ -250,7 +250,21 @@ void lenv_del(lenv* e) {
   free(e);
 }
 
-/* line 263 */
+lval* lenv_get(lenv* e, lval* k) {
+
+  /*Iterate over all items in environment*/
+  for (int i = 0; i < e->count; i++) {
+    /*Check if the stored string matches the symbols string*/
+    /*if it does, return a copy of the value */
+    if (strcmp(e->syms[i], k->sym) ==0) {
+      return lval_copy(e->vals[i]);
+    }
+  }
+  /*if no symbol found return error*/
+  return lval_err("Unbound Symbol '%s'", k->sym);
+}
+
+/*Line 277*/
 
 #define LASSERT(args, cond, err) \
   if (!(cond)) { lval_del(args); return lval_err(err); }
