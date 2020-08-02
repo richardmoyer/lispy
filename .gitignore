@@ -52,3 +52,9 @@ Mkfile.old
 dkms.conf
 /.ccls-cache/@@home@richm@projects@lispy/
 /.ccls-cache/@home@richm@projects@lispy/
+/.ccls-cache/@@home@richm@code@lispy/
+/.ccls-cache/@home@richm@code@lispy/mpc.h
+/.ccls-cache/@home@richm@code@lispy/mpc.h.blob
+/.ccls-cache/@home@richm@code@lispy/q_expressions.c.blob
+/.ccls-cache/@home@richm@code@lispy/variables.c
+/.ccls-cache/@home@richm@code@lispy/variables.c.blob
