@@ -268,10 +268,45 @@ void lenv_put(lenv* e, lval* k, lval* v) {
   
   /* Iterate over all items in environment*/
   /* this is to see if variable already exists */
+  for (int i = 0; i < e->count; i++) {
+
+    /* If variable is found delete item at that position */
+    /* And replace with variable supplied by user */
+    if (strcmp(e->syms[i], k->sym) == 0) {
+      lval_del(e->vals[i]);
+      e->vals[i] = lval_copy(v);
+      return;
+    }
+  }
+  /* if no existing entry found allocate space for new entry */
+  e->count++;
+  e->vals = realloc(e->vals, sizeof(lval*) * e->count);
+  e->syms = realloc(e->syms, sizeof(char*) * e->count);
+
+  /* Copy contents of lval and symbol string into new location */
+  e->vals[e->count-1] = lval_copy(v);
+  e->syms[e->count-1] = malloc(strlen(k->sym)+1);
+  strcpy(e->syms[e->count-1], k->sym);
 }
 
-#define LASSERT(args, cond, err) \
-  if (!(cond)) { lval_del(args); return lval_err(err); }
+/* BUILTINS */
+
+#define LASSERT(args, cond, fmt, ...) \
+  if (!(cond)) { lval* err = lval_err(fmt, ##__VA_ARGS__); lval_del(args); return err; }
+
+#define LASSERT_TYPE(func, args, index, expect) \
+  LASSERT(args, args->cell[index]->type == expect,  \
+          "Function '%s' passed incorrect type for argument %i. Got %s, Expected %s.", \
+          func, index, ltype_name(args->cell[index]->type), ltype_name(expect))
+
+#define LASSERT_NUM(func, args, num)            \
+  LASSERT(args, args->count == num,             \
+          "Function '%s' passed incorrect number of arguments. Got %i, Expected %i.", \
+          func, args->count, num)
+
+#define LASSERT_NOT_EMPTY(func, args, index)    \
+  LASSERT(args, args->cell[index]->count != 0,  \
+  "Function '%s' passed {} for argument %i.", func, index);
 
 lval* lval_eval(lval* v);
 
