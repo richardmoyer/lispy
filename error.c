@@ -3,7 +3,7 @@
 #ifdef _WIN32
 
 static char buffer[2048];
-
+/* test for git */
 char* readline(char* prompt) {
   fputs(prompt, stdout);
   fgets(buffer, 2048, stdin);
